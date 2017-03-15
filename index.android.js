@@ -8,25 +8,38 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
+  Image,
   Text,
-  View
+  View,
+  Navigator
 } from 'react-native';
+import Boy from './Boy';
+import TabNavigator from 'react-native-tab-navigator';
 
 export default class git_hub extends Component {
+  // 构造
+    constructor(props) {
+      super(props);
+      // 初始状态
+      this.state = {
+        selectedTab:'tb_popular'
+      };
+    }
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+        <View style={styles.container}>
+            <Navigator
+                initialRoute={
+                    {
+                        component:Boy
+                    }
+                }
+                renderScene={(route,navigator)=>{
+                    let Component=route.component;
+                    return <Component  navigator={navigator} {...route.params} />
+                }}
+            ></Navigator>
+        </View>
     );
   }
 }
@@ -34,20 +47,20 @@ export default class git_hub extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  page1:{
+    flex:1,
+    backgroundColor:'green'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  page2:{
+    flex:1,
+    backgroundColor:'yellow'
   },
+  img:{
+    height:22,
+    width:22
+  }
 });
 
 AppRegistry.registerComponent('git_hub', () => git_hub);
