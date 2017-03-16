@@ -6,47 +6,95 @@ import {
     Text,
     View,
     StyleSheet,
-    Image
+    Image,
+    ListView,
+    TouchableOpacity,
+    RefreshControl
 } from 'react-native';
 import Girl from './Girl';
 import NavigatorBar from './NavigatorBar';
+import Toast, {DURATION} from 'react-native-easy-toast'
+const data={
+    result:[
+        {
+            email:'haahhaha@1222.com',
+            fullname:'zhangsan'
+        },
+        {
+            email:'haahhaha@1222.com',
+            fullname:'zhangsan'
+        },
+        {
+            email:'haahhaha@1222.com',
+            fullname:'zhangsan'
+        },
+        {
+            email:'haahhaha@1222.com',
+            fullname:'zhangsan'
+        },
+        {
+            email:'haahhaha@1222.com',
+            fullname:'zhangsan'
+        }
+    ]
+}
 
-export default class Boy extends Component{
+export default class ListViewText extends Component{
     // 构造
       constructor(props) {
         super(props);
         // 初始状态
+        const ds=new ListView.DataSource({rowHasChanged:(r1,r2)=> r1 !==r2})
         this.state = {
-            gift:'',
+            dataSource:ds.cloneWithRows(data.result),
+            isLoading:true
         };
+        this.onLoad();
       }
+
+    renderRow(item){
+        return <View style={styles.row}>
+            <TouchableOpacity
+                onPress={()=>{
+                    this.toast.show('你单击了'+item.fullname,DURATION.LENGTH_LONG);
+                } }>
+                <Text style={styles.tips}>{item.email}</Text>
+                <Text style={styles.tips}>{item.fullname}</Text>
+            </TouchableOpacity>
+        </View>
+    }
+
+    renderFooter(){
+        return <Image style={{width:100, height:100} } source={require('./res/images/ic_polular.png')} />
+    }
+    renderSeparator(sectionID, rowID, adjacentRowHighlighted){
+        return <View  key={rowID} style={styles.line}>
+
+        </View>
+    }
+    onLoad(){
+        setTimeout(()=>{
+           this.setState({
+                isLoading:false
+           })
+        },2000)
+    }
     render(){
         return (
             <View style={styles.container} >
-                <NavigatorBar title='boy' statusBar={{
-                    backgroundColor:'gray',
-                    barStyle:'dark-content',
-                }}
-                   backgroundColor='#00a1e9'
-                   justifyContent='center'
+                <NavigatorBar title='listview' justifyContent='center' backgroundColor='#02A682'/>
+                <ListView dataSource={this.state.dataSource}
+                          renderRow={(item)=>this.renderRow(item)}
+                          renderSeparator={(sectionID, rowID, adjacentRowHighlighted) =>this.renderSeparator(sectionID, rowID, adjacentRowHighlighted)}
+                          renderFooter={()=>this.renderFooter()}
+                          refreshControl={  <RefreshControl
+                            refreshing={this.state.isLoading}
+                            onRefresh={()=>this.onLoad()}
+                            colors={['#ff0000', '#00ff00', '#0000ff']}
+                            progressBackgroundColor="#ffff00"
+                          /> }
                 />
-                <Text style={styles.text}>I am a boy</Text>
-                <Text style={styles.text}
-                      onPress={()=>{
-                            this.props.navigator.push({
-                                component:Girl,
-                                params:{
-                                    gift:'一支玫瑰',
-                                    onCallBack:(gift)=>{
-                                        this.setState({
-                                            gift:gift
-                                        })
-                                    }
-                                }
-                            })
-                      }}
-                >送女孩一支玫瑰</Text>
-                <Text style={styles.text}>{this.state.gift}</Text>
+                <Toast ref={toast=>{this.toast=toast}} />
             </View>
         )
     }
@@ -59,5 +107,18 @@ const styles=StyleSheet.create({
     },
     text:{
        fontSize:20
+    },
+    tips:{
+        fontSize:20,
+        color:'#37A'
+    },
+    row:{
+        height:50,
+        margin:5
+    },
+    line:{
+       height:1,
+       backgroundColor:'black'
     }
+
 })

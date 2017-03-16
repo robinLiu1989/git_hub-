@@ -13,8 +13,8 @@ import {
   View,
   Navigator
 } from 'react-native';
-import ListViewText from './ListViewText';
-import FecthText from './FecthText';
+import Boy from './Boy';
+import TabNavigator from 'react-native-tab-navigator';
 
 export default class git_hub extends Component {
   // 构造
@@ -22,7 +22,7 @@ export default class git_hub extends Component {
       super(props);
       // 初始状态
       this.state = {
-
+        selectedTab:'tb_popular'
       };
     }
   render() {
@@ -31,7 +31,7 @@ export default class git_hub extends Component {
             <Navigator
                 initialRoute={
                     {
-                        component:FecthText
+                        component:Boy
                     }
                 }
                 renderScene={(route,navigator)=>{
