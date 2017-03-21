@@ -1,8 +1,14 @@
 package com.git_hub;
 
+
 import android.app.Application;
+import android.util.Log;
+
+
+
 
 import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,19 +28,21 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+          //将我们创建的包管理器给添加进来
+          new MyReactPackage()
       );
     }
   };
 
   @Override
   public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
+      return mReactNativeHost;
   }
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
-  }
+   @Override
+    public void onCreate() {
+      super.onCreate();
+      SoLoader.init(this, /* native exopackage */ false);
+    }
 }

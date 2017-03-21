@@ -40,7 +40,7 @@ export default class HomePage extends Component{
                     renderSelectedIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={[styles.img,{tintColor:'red'}]} />}
                     onPress={() => this.setState({ selectedTab: 'tb_trending' })}>
                     <View style={styles.page2}>
-
+                        <PopularPage/>
                     </View>
                 </TabNavigator.Item>
                 <TabNavigator.Item
@@ -52,7 +52,7 @@ export default class HomePage extends Component{
                     badgeText="1"
                     onPress={() => this.setState({ selectedTab: 'tb_favorite' })}>
                     <View style={styles.page1}>
-
+                        <PopularPage/>
                     </View>
                 </TabNavigator.Item>
                 <TabNavigator.Item
@@ -63,7 +63,7 @@ export default class HomePage extends Component{
                     renderSelectedIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={[styles.img,{tintColor:'red'}]} />}
                     onPress={() => this.setState({ selectedTab: 'tb_my' })}>
                     <View style={styles.page2}>
-
+                        <PopularPage/>
                     </View>
                 </TabNavigator.Item>
             </TabNavigator>

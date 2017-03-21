@@ -13,6 +13,8 @@ import {
   View
 } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
+import NavigatorBar  from './NavigatorBar';
+
 
 export default class git_hub extends Component {
   // 构造
@@ -35,7 +37,13 @@ export default class git_hub extends Component {
               badgeText="1"
               onPress={() => this.setState({ selectedTab: 'tb_popular' })}>
             <View style={styles.page1}>
-
+                <NavigatorBar title='boy' statusBar={{
+                    backgroundColor:'gray',
+                    barStyle:'dark-content',
+                }}
+                              backgroundColor='#00a1e9'
+                              justifyContent='center'
+                />
             </View>
           </TabNavigator.Item>
           <TabNavigator.Item

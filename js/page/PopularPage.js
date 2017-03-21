@@ -6,10 +6,13 @@ import {
     Text,
     View,
     TextInput,
-    StyleSheet
+    StyleSheet,
+    ListView
 } from 'react-native';
 import NavigatorBar from '../common/NavigatorBar';
 import DataRepository from '../expand/dao/DataRepository';
+import FecthText  from '../common/FecthText';
+import ScrollTabView from 'react-native-scrollable-tab-view'
 
 const URL='http://app.95e.com/vm/getMaterials.aspx?';
 const QUERY_STR='c=';
@@ -45,19 +48,47 @@ export default class PopularPage extends Component{
     render(){
         return <View>
             <NavigatorBar title='popularpage' justifyContent='center' />
+            <ScrollTabView></ScrollTabView>
 
-            <TextInput onChangeText={text=>this.text=text }/>
-            <Text
-                onPress={()=>this.onLoad()}
-            >获取数据</Text>
-            <Text>{this.state.result}</Text>
+
         </View>
     }
 }
 
-// const styles=StyleSheet.create({
-//     text:{
-//         fontSize:40,
-//         height:40
-//     }
-// })
+class PopularTab extends Component {
+    constructor(props) {
+        super(props);
+        this.dataResipository=new DataRepository();
+        this.state = {
+          result:'',
+        };
+    }
+    loadData(){
+        let url=URL+this.key+QUERY_STR;
+        this.dataResipository
+            .fetchNetRepository(url)
+            .then(result=>{
+                this.setState({
+                    result:JSON.stringify(result),
+                }).catch(err=>{
+                    console.log(err);
+                })
+            })
+    }
+    render(){
+        <View>
+
+        </View>
+    }
+
+
+}
+
+const styles=StyleSheet.create({
+    container:{
+        flex:1,
+    },
+    tips:{
+        fontSize:20
+    }
+})
