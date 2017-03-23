@@ -18,7 +18,7 @@ export default class WelcomePage extends Component{
             this.props.navigator.push({
                 component:HomePage,
             })
-        },1000)
+        },100)
     }
     // 构造
 

@@ -8,7 +8,9 @@ import {
     TextInput,
     StyleSheet,
     ListView,
-    NativeModules
+    NativeModules,
+    RefreshControl,
+    StatusBar
 } from 'react-native';
 import NavigatorBar from '../common/NavigatorBar';
 import DataRepository from '../expand/dao/DataRepository';
@@ -31,7 +33,7 @@ export default class PopularPage extends Component{
                 par:'',
                 willmount:''
           }
-          // const {navigator} = this.props;
+
       }
     
 
@@ -39,89 +41,44 @@ export default class PopularPage extends Component{
 
         NativeModules.MyMapIntentModule.startActivityForResult("com.git_hub.TestJumpActivity",100,
             (successMsg) => {
-                //this.setState({TEXT:successMsg,});
-                // console.log(successMsg);
+
                 if(successMsg==='1000'){
                     this.setState({
                         par:successMsg
 
                     })
                 }
-                // navigator.push({
-                //     name:'Boy',
-                //     component:'Boy'
-                // })
-
             },
             (erroMsg) => {alert(erroMsg)}
         );
     
     }
-    componentWillUpdate(){
 
-
-
-
-    }
 
     render(){
 
             return <View style={styles.container}>
-                <NavigatorBar title='popularpage' justifyContent='center' />
+                <NavigatorBar title='popularpage' justifyContent='center'
+                              StatusBar={{backgroundColor:'blue'}}
+                />
                 <ScrollableTabView
                     renderTabBar={() => <ScrollableTabBar/> }
+                    tabBarBackgroundColor='#2196F3'
+                    tabBarActiveTextColor='white'
                 >
 
-                    <PopularTab tabLabel="React">React</PopularTab>
-                    <PopularTab tabLabel="js">js</PopularTab>
+                    <PopularTab tabLabel="React" onPress={()=>this.loadData()}
+                    >React</PopularTab>
+                    <PopularTab tabLabel="js" onPress={()=>this.loadData()}
+                    >js</PopularTab>
+                    <PopularTab tabLabel="ios" onPress={()=>this.loadData()}
+                    >ios</PopularTab>
 
                 </ScrollableTabView>
-                <Text style={{height:300,fontSize:30}}
-                      onPress={()=>this.callNativePage()}
-                >点我调用原生Helloword</Text>
-                <Text style={{height:100,fontSize:30}}
 
-                >原生Helloword返回的参数：{this.state.par}</Text>
-                <Text style={{height:100,fontSize:30}}
-
-                >componentWillMount中的参数：{this.state.willmount}</Text>
             </View>
         }
 
-
-
-}
-
-class PopularTab extends Component {
-    constructor(props) {
-        super(props);
-        this.dataResipository=new DataRepository();
-        const ds=new ListView.DataSource({rowHasChanged:(r1,r2)=>r1!==r2 })
-        this.state = {
-          result:'',
-          key:'react',
-          dataSource:ds.cloneWithRows([
-              'ha','xi','hehe'
-          ])
-        };
-    }
-
-    componentDidMount() {
-        // this.loadData()
-    }
-    // loadData(){
-    //     let url=URL+this.state.key+QUERY_STR;
-    //     this.dataResipository
-    //         .fetchNetRepository(url)
-    //         .then(result=>{
-    //             this.setState({
-    //                 result:JSON.stringify(result),
-    //                 dataSource:this.state.dataSource.cloneWithRows(result)
-    //             }).catch(err=>{
-    //                 console.log(err);
-    //             })
-    //         })
-    // }
     loadData(){
         let url='https://api.github.com/search/repositories?q=js&sort=stars';
         HttpUtils.get(url)
@@ -129,9 +86,44 @@ class PopularTab extends Component {
                 this.setState({
                     result:JSON.stringify(result),
                     dataSource:this.state.dataSource.cloneWithRows(JSON.stringify(result)),
-
                 })
-                // console.log(result)
+
+            })
+            .catch(err=>{
+                this.setState({
+                    result:JSON.stringify(err)
+                })
+            })
+    }
+
+}
+
+class PopularTab extends Component {
+    constructor(props) {
+        super(props);
+        this.dataResipository=new DataRepository();
+
+        this.state = {
+          result:'',
+          key:'react',
+          dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1!==r2 }),
+          isLoading:false
+
+        };
+    }
+
+    componentDidMount() {
+        this.loadData()
+    }
+
+    loadData(){
+        let url=URL+this.props.tabLabel+QUERY_STR;
+        HttpUtils.get(url)
+            .then(result=>{
+                this.setState({
+                    result:JSON.stringify(result),
+                    dataSource:this.state.dataSource.cloneWithRows(result.items),
+                })
 
             })
             .catch(err=>{
@@ -144,24 +136,41 @@ class PopularTab extends Component {
 
 
     renderRow(data){
-        return <View>
+        return <View  style={styles.row}>
 
-            <Text>{data}</Text>
+            <Text>{data.full_name}</Text>
+            <Text>{data.description}</Text>
+            <Text>{data.owner.avatar_url}</Text>
 
         </View>
     }
 
 
     render(){
-        return <View>
+        return <View  style={styles.container}>
              <ListView
                 dataSource={this.state.dataSource}
                 renderRow={(data)=>this.renderRow(data)}
+                enableEmptySections={true}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.isLoading}
+                        onRefresh={()=>this.loadData()}
+                        tintColor="#ff0000"
+                        title="Loading..."
+                        titleColor="#00ff00"
+                        colors={['#ff0000', '#00ff00', '#0000ff']}
+                        progressBackgroundColor="#ffff00"
+                    />
+                }
               />
         </View>
     }
 
 }
+
+
+
 
 const styles=StyleSheet.create({
     container:{
@@ -169,5 +178,24 @@ const styles=StyleSheet.create({
     },
     tips:{
         fontSize:20
+    },
+    row:{
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 10,
+        marginLeft: 5,
+        marginRight: 5,
+        marginVertical: 3,
+        borderColor: '#dddddd',
+        borderStyle: null,
+        borderWidth: 0.5,
+        borderRadius: 2,
+        shadowColor: 'gray',
+        shadowOffset: {width:0.5, height: 0.5},
+        shadowOpacity: 0.4,
+        shadowRadius: 1,
+        elevation:2
+
     }
+
 })

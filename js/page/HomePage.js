@@ -23,13 +23,7 @@ export default class HomePage extends Component{
             selectedTab:'tb_popular'
         };
     }
-    // navigator.configureScene=this.configureScene
-    // configureScene(route, routeStack){
-    //     if (route.type == 'Modal') {
-    //         return Navigator.SceneConfigs.FloatFromBottom;
-    //     }
-    //     return Navigator.SceneConfigs.PushFromLeft;
-    // }
+
 
     callNativePage(){
       let navigate=this.props.navigator;
@@ -60,91 +54,72 @@ export default class HomePage extends Component{
     }
 
     render() {
-        return <View style={styles.page2}>
-            <Text  style={styles.text}
-                onPress={()=>this.callNativePage()}
-            >点我调用原生页面</Text>
-            <Text>
-                {this.state.par}
-            </Text>
-            <Text   style={styles.text}
-                    onPress={()=>this.callRNPage()}
-            >点我调用RN页面</Text>
-            </View>
-        // (
-            // <TabNavigator>
-            //     <TabNavigator.Item
-            //         selected={this.state.selectedTab === 'tb_popular'}
-            //         selectedTitleStyle={{color:'red'}}
-            //         title="最热"
-            //         renderIcon={() => <Image source={require('../../res/images/ic_polular.png')}  style={styles.img} />}
-            //         renderSelectedIcon={() => <Image source={require('../../res/images/ic_polular.png')} style={[styles.img,{tintColor:'red'}]}  />}
-            //         badgeText="1"
-            //         onPress={() => this.setState({ selectedTab: 'tb_popular' })}>
-            //         <View style={styles.page2}>
-            //             <Text
-            //                 onPress={()=>this.callNativePage()}
-            //             >点我调用原生页面</Text>
-            //             <Text>
-            //                 {this.state.par}
-            //             </Text>
-            //             <Text   style={styles.text}
-            //                 onPress={()=>this.callRNPage()}
-            //             >点我调用RN页面</Text>
-            //         </View>
-            //     </TabNavigator.Item>
-            //     <TabNavigator.Item
-            //         selected={this.state.selectedTab === 'tb_trending'}
-            //         selectedTitleStyle={{color:'red'}}
-            //         title="趋势"
-            //         renderIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={styles.img} />}
-            //         renderSelectedIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={[styles.img,{tintColor:'red'}]} />}
-            //         onPress={() => this.setState({ selectedTab: 'tb_trending' })}>
-            //         <View style={styles.page2}>
-            //
-            //         </View>
-            //     </TabNavigator.Item>
-            //     <TabNavigator.Item
-            //         selected={this.state.selectedTab === 'tb_favorite'}
-            //         selectedTitleStyle={{color:'red'}}
-            //         title="收藏"
-            //         renderIcon={() => <Image source={require('../../res/images/ic_polular.png')}  style={styles.img} />}
-            //         renderSelectedIcon={() => <Image source={require('../../res/images/ic_polular.png')} style={[styles.img,{tintColor:'red'}]}  />}
-            //         badgeText="1"
-            //         onPress={() => this.setState({ selectedTab: 'tb_favorite' })}>
-            //         <View style={styles.page1}>
-            //
-            //         </View>
-            //     </TabNavigator.Item>
-            //     <TabNavigator.Item
-            //         selected={this.state.selectedTab === 'tb_my'}
-            //         selectedTitleStyle={{color:'red'}}
-            //         title="我的"
-            //         renderIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={styles.img} />}
-            //         renderSelectedIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={[styles.img,{tintColor:'red'}]} />}
-            //         onPress={() => this.setState({ selectedTab: 'tb_my' })}>
-            //         <View style={styles.page2}>
-            //
-            //         </View>
-            //     </TabNavigator.Item>
-            // </TabNavigator>
+        return (
+            <TabNavigator>
+                <TabNavigator.Item
+                    selected={this.state.selectedTab === 'tb_popular'}
+                    selectedTitleStyle={{color:'red'}}
+                    title="最热"
+                    renderIcon={() => <Image source={require('../../res/images/ic_polular.png')}  style={styles.img} />}
+                    renderSelectedIcon={() => <Image source={require('../../res/images/ic_polular.png')} style={[styles.img,{tintColor:'red'}]}  />}
+                    badgeText="1"
+                    onPress={() => this.setState({ selectedTab: 'tb_popular' })}>
+                    <View style={styles.page2}>
+                        <PopularPage/>
+                    </View>
+                </TabNavigator.Item>
+                <TabNavigator.Item
+                    selected={this.state.selectedTab === 'tb_trending'}
+                    selectedTitleStyle={{color:'red'}}
+                    title="趋势"
+                    renderIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={styles.img} />}
+                    renderSelectedIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={[styles.img,{tintColor:'red'}]} />}
+                    onPress={() => this.setState({ selectedTab: 'tb_trending' })}>
+                    <View style={styles.page2}>
+                        <PopularPage/>
+                    </View>
+                </TabNavigator.Item>
+                <TabNavigator.Item
+                    selected={this.state.selectedTab === 'tb_favorite'}
+                    selectedTitleStyle={{color:'red'}}
+                    title="收藏"
+                    renderIcon={() => <Image source={require('../../res/images/ic_polular.png')}  style={styles.img} />}
+                    renderSelectedIcon={() => <Image source={require('../../res/images/ic_polular.png')} style={[styles.img,{tintColor:'red'}]}  />}
+                    badgeText="1"
+                    onPress={() => this.setState({ selectedTab: 'tb_favorite' })}>
+                    <View style={styles.page1}>
+                        <PopularPage/>
+                    </View>
+                </TabNavigator.Item>
+                <TabNavigator.Item
+                    selected={this.state.selectedTab === 'tb_my'}
+                    selectedTitleStyle={{color:'red'}}
+                    title="我的"
+                    renderIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={styles.img} />}
+                    renderSelectedIcon={() => <Image source={require('../../res/images/ic_trending.png')} style={[styles.img,{tintColor:'red'}]} />}
+                    onPress={() => this.setState({ selectedTab: 'tb_my' })}>
+                    <View style={styles.page2}>
+                        <PopularPage/>
+                    </View>
+                </TabNavigator.Item>
+            </TabNavigator>
 
-        // );
+        );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5FCFF',
+        // backgroundColor: '#F5FCFF',
     },
     page1:{
         flex:1,
-        backgroundColor:'green'
+        // backgroundColor:'green'
     },
     page2:{
         flex:1,
-        backgroundColor:'yellow'
+        // backgroundColor:'yellow'
     },
     img:{
         height:22,
