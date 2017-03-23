@@ -1,11 +1,15 @@
 package com.git_hub;
 
 import android.app.Activity;
+
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.text.TextUtils;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
+
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -39,6 +43,12 @@ public class MyMapIntentModule extends ReactContextBaseJavaModule {
             if(null!=currentActivity){
                 Class aimActivity = Class.forName(name);
                 Intent intent = new Intent(currentActivity,aimActivity);
+             /**
+               * Intent.putExtra('params',params);   RN可以向原生传参
+                *      intent.putExtra("logo", logo);
+                * intent.putExtra("title", title);
+
+             */
                 currentActivity.startActivity(intent);
             }
         }catch(Exception e){
@@ -47,4 +57,25 @@ public class MyMapIntentModule extends ReactContextBaseJavaModule {
                     "无法打开activity页面: "+e.getMessage());
         }
     }
+
+     @ReactMethod
+
+          public void startActivityForResult(String activityName,int requestCode,Callback successCallback,Callback erroCallback){
+              try {
+                  Activity currentActivity = getCurrentActivity();
+                  if ( null!= currentActivity) {
+                      Class aimActivity = Class.forName(activityName);
+                      Intent intent = new Intent(currentActivity,aimActivity);
+                      currentActivity.startActivityForResult(intent,requestCode);
+                      String result = MainActivity.myBlockingQueue.take();
+                      successCallback.invoke(result);
+                      Log.e("MainActivity",result);
+                  }
+              } catch (Exception e) {
+                  erroCallback.invoke(e.getMessage());
+                  throw new JSApplicationIllegalArgumentException(
+                          "Could not open the activity : " + e.getMessage());
+              }
+          }
+
 }

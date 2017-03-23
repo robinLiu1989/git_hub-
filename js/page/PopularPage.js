@@ -7,34 +7,132 @@ import {
     View,
     TextInput,
     StyleSheet,
-    ListView
+    ListView,
+    NativeModules
 } from 'react-native';
 import NavigatorBar from '../common/NavigatorBar';
 import DataRepository from '../expand/dao/DataRepository';
-import FecthText  from '../common/FecthText';
-import ScrollTabView from 'react-native-scrollable-tab-view'
+import ScrollableTabView, {ScrollableTabBar}from  'react-native-scrollable-tab-view';
+import HttpUtils  from '../expand/dao/HttpUtils';
+import Boy from '../../Boy';
 
-const URL='http://app.95e.com/vm/getMaterials.aspx?';
-const QUERY_STR='c=';
+const URL='https://api.github.com/search/repositories?q=';
+const QUERY_STR='&sort=stars';
+
+
+
 
 export default class PopularPage extends Component{
     // 构造
       constructor(props) {
         super(props);
         // 初始状态
-        this.dataRepository=new DataRepository();
-
-        this.state={
-            result:''
-        }
+          this.state={
+                par:'',
+                willmount:''
+          }
+          // const {navigator} = this.props;
       }
-    onLoad(){
-        let url=this.genUrl(this.text);
-        this.dataRepository.fetchNetRepository(url)
+    
+
+    callNativePage(){
+
+        NativeModules.MyMapIntentModule.startActivityForResult("com.git_hub.TestJumpActivity",100,
+            (successMsg) => {
+                //this.setState({TEXT:successMsg,});
+                // console.log(successMsg);
+                if(successMsg==='1000'){
+                    this.setState({
+                        par:successMsg
+
+                    })
+                }
+                // navigator.push({
+                //     name:'Boy',
+                //     component:'Boy'
+                // })
+
+            },
+            (erroMsg) => {alert(erroMsg)}
+        );
+    
+    }
+    componentWillUpdate(){
+
+
+
+
+    }
+
+    render(){
+
+            return <View style={styles.container}>
+                <NavigatorBar title='popularpage' justifyContent='center' />
+                <ScrollableTabView
+                    renderTabBar={() => <ScrollableTabBar/> }
+                >
+
+                    <PopularTab tabLabel="React">React</PopularTab>
+                    <PopularTab tabLabel="js">js</PopularTab>
+
+                </ScrollableTabView>
+                <Text style={{height:300,fontSize:30}}
+                      onPress={()=>this.callNativePage()}
+                >点我调用原生Helloword</Text>
+                <Text style={{height:100,fontSize:30}}
+
+                >原生Helloword返回的参数：{this.state.par}</Text>
+                <Text style={{height:100,fontSize:30}}
+
+                >componentWillMount中的参数：{this.state.willmount}</Text>
+            </View>
+        }
+
+
+
+}
+
+class PopularTab extends Component {
+    constructor(props) {
+        super(props);
+        this.dataResipository=new DataRepository();
+        const ds=new ListView.DataSource({rowHasChanged:(r1,r2)=>r1!==r2 })
+        this.state = {
+          result:'',
+          key:'react',
+          dataSource:ds.cloneWithRows([
+              'ha','xi','hehe'
+          ])
+        };
+    }
+
+    componentDidMount() {
+        // this.loadData()
+    }
+    // loadData(){
+    //     let url=URL+this.state.key+QUERY_STR;
+    //     this.dataResipository
+    //         .fetchNetRepository(url)
+    //         .then(result=>{
+    //             this.setState({
+    //                 result:JSON.stringify(result),
+    //                 dataSource:this.state.dataSource.cloneWithRows(result)
+    //             }).catch(err=>{
+    //                 console.log(err);
+    //             })
+    //         })
+    // }
+    loadData(){
+        let url='https://api.github.com/search/repositories?q=js&sort=stars';
+        HttpUtils.get(url)
             .then(result=>{
                 this.setState({
-                    result:JSON.stringify(result)
+                    result:JSON.stringify(result),
+                    dataSource:this.state.dataSource.cloneWithRows(JSON.stringify(result)),
+
                 })
+                // console.log(result)
+
             })
             .catch(err=>{
                 this.setState({
@@ -42,45 +140,26 @@ export default class PopularPage extends Component{
                 })
             })
     }
-    genUrl(key){
-        return URL+QUERY_STR+key;
+
+
+
+    renderRow(data){
+        return <View>
+
+            <Text>{data}</Text>
+
+        </View>
     }
+
+
     render(){
         return <View>
-            <NavigatorBar title='popularpage' justifyContent='center' />
-            <ScrollTabView></ScrollTabView>
-
-
+             <ListView
+                dataSource={this.state.dataSource}
+                renderRow={(data)=>this.renderRow(data)}
+              />
         </View>
     }
-}
-
-class PopularTab extends Component {
-    constructor(props) {
-        super(props);
-        this.dataResipository=new DataRepository();
-        this.state = {
-          result:'',
-        };
-    }
-    loadData(){
-        let url=URL+this.key+QUERY_STR;
-        this.dataResipository
-            .fetchNetRepository(url)
-            .then(result=>{
-                this.setState({
-                    result:JSON.stringify(result),
-                }).catch(err=>{
-                    console.log(err);
-                })
-            })
-    }
-    render(){
-        <View>
-
-        </View>
-    }
-
 
 }
 

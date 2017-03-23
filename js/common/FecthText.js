@@ -12,6 +12,9 @@ import {
 import NavigatorBar from './NavigatorBar';
 import HttpUtils  from './HttpUtils';
 
+
+
+
 export default class FecthText extends Component{
     // 构造
       constructor(props) {
@@ -54,7 +57,8 @@ export default class FecthText extends Component{
                 <NavigatorBar title='fecth的使用'/>
                 <Text  style={styles.text}
                     onPress={()=>{
-                        this.onLoad('http://app.95e.com/vm/getTagMaterials.aspx?v=1&i=21')
+
+                        this.onLoad('https://api.github.com/search/repositories?q=js&sort=stars')
                     }}
                 >获取数据</Text>
                 <Text  style={styles.text}
