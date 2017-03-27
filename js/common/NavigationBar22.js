@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 let width = Dimensions.get('window').width;
-
+let xixi='haha';
 export default class NavigationBar extends Component{
 
     static propTypes = {
