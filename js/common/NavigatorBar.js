@@ -8,7 +8,8 @@ import {
     StyleSheet,
     Image,
     StatusBar,
-    Platform
+    Platform,
+    TouchableOpacity
 } from 'react-native';
 
 const Nav_Bar_Height_Android=50;
@@ -37,7 +38,8 @@ export default class NavigatorBar extends Component{
             barStyle:'light-content',
             hidden:false
         },
-        backgroundColor:'red'
+        backgroundColor:'red',
+       
     }
     // 构造
       constructor(props) {
@@ -49,16 +51,19 @@ export default class NavigatorBar extends Component{
         };
       }
         render(){
+
             let status=<View style={styles.statusBar}>
                  <StatusBar {...this.props.statusBar} />
                 </View>
-            let titleView=this.props.titleView? this.props.titleView: <Text style={styles.title}>{this.props.title}</Text>
+            let titleView=this.props.titleView? this.props.titleView: <Text style={[styles.title]}>{this.props.title}</Text>
+
             let content=<View style={[styles.NavBar,{backgroundColor:this.props.backgroundColor},{justifyContent:this.props.justifyContent}]}>
                 {this.props.leftButton}
                 <View style={styles.titleViewContainer}>
                     {titleView}
                 </View>
                 {this.props.rightButton}
+
             </View>
             return (
                 <View style={styles.container}>
@@ -76,7 +81,7 @@ const styles=StyleSheet.create({
     NavBar:{
         alignItems:'center',
         height:Platform.OS==='ios'? Nav_Bar_Height_Ios:Nav_Bar_Height_Android,
-        flexDirection:'row'
+        flexDirection:'row',
     },
     titleViewContainer:{
         justifyContent:'center',

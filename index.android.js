@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import WelcomePage from './js/page/WelcomePage';
 import FecthText  from './js/common/FecthText'
+import AsyncStorageTest  from './AsyncStorageTest'
+import CustomKeyPage from './js/page/my/CustomKeyPage'
 
 export default class SetUp extends Component{
       // 构造

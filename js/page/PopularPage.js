@@ -59,7 +59,7 @@ export default class PopularPage extends Component{
 
             return <View style={styles.container}>
                 <NavigatorBar title='popularpage' justifyContent='center'
-                              StatusBar={{backgroundColor:'blue'}}
+                              statusBar={{backgroundColor:'blue'}}
                 />
                 <ScrollableTabView
                     renderTabBar={() => <ScrollableTabBar/> }
@@ -156,11 +156,11 @@ class PopularTab extends Component {
                     <RefreshControl
                         refreshing={this.state.isLoading}
                         onRefresh={()=>this.loadData()}
-                        tintColor="#ff0000"
+                        tintColor={'#2196F3'}
                         title="Loading..."
-                        titleColor="#00ff00"
-                        colors={['#ff0000', '#00ff00', '#0000ff']}
-                        progressBackgroundColor="#ffff00"
+                        titleColor="#2196F3"
+                        colors={['#2196F3']}
+
                     />
                 }
               />
